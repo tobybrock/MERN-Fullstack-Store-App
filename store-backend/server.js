@@ -13,20 +13,17 @@ app.use(session({
   saveUninitialized: false
 }));
 
-// SET UP CORS AS MIDDLEWARE, SO any client can make a request to our server
+// SET UP CORS AS MIDDLEWARE, SO any client can make a request server
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-
-// CORS allows requests to come in from React
 app.use(cors());
 
-// Require the controller after the middleware
-
 const userRouter  = require('./routes/userRouter');
-
+const itemRouter  = require('./routes/itemRouter');
 
 app.use('/user', userRouter);
+app.use('/item', itemRouter);
 
 app.listen(process.env.PORT || 6000, () => {
   console.log('listening on port 6000');

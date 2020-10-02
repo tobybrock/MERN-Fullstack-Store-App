@@ -1,4 +1,3 @@
-  
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -34,11 +33,6 @@ router.post("/register", async (req, res) => {
       const createdUser = await User.create(req.body);
       console.log(createdUser, ' created user');
 
-      req.session.userId = createdUser._id;
-      req.session.displayName = createdUser.displayName;
-      req.session.email = createdUser.email;
-      req.session.logged = true;
-    
     res.send();
   } catch (err) {
     res.status(500).json({ error: err.message });

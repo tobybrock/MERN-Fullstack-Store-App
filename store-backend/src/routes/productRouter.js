@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const Product = require("../models/productModel");
-import { isAuth, isAdmin } from '../../auth';
-
-const router = express.Router();
+const { isAuth, isAdmin } = require('../../auth');
 
 router.get('/', async (req, res) => {
 try {
@@ -48,7 +46,7 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', isAuth, isAdmin, async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {new: true});
-    res.status(201).json("Resume successfully updated", product)
+    res.status(201).json("Product successfully updated", product)
     } catch(err){
    res.status(500).json(' Error in Updating Product.', err);
     }
@@ -67,10 +65,10 @@ router.delete('/:id', isAuth, isAdmin, async (req, res) => {
 router.post('/', isAuth, isAdmin, async (req, res) => {
   try{
   const product = await Product.create(req.body);
-   res.status(201).json({ message: 'New product created', data: newProduct });
+   res.status(201).json({ message: 'New product created', data: product });
   } catch(err){
-  return res.status(500).json(' Error in creating product.', err);
+  return res.status(500).json({error: err.message });
   }
 });
 
-export default router;
+module.exports = router;

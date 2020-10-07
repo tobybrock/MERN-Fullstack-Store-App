@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/resume', {
+mongoose.connect('mongodb://localhost/store', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,

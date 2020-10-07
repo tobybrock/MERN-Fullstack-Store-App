@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { isAdmin } = require("../../auth");
 const User = require("../models/userModel");
 
 router.post("/register", async (req, res) => {
@@ -8,21 +9,21 @@ router.post("/register", async (req, res) => {
     // validate
 
     if (!req.body.email || !req.body.password || !req.body.passwordCheck)
-      return res.status(400).json({ msg: "Not all fields have been entered." });
+      return res.status(400).json("Not all fields have been entered.");
     if (req.body.password.length < 5)
       return res
         .status(400)
-        .json({ msg: "The password needs to be at least 5 characters long." });
+        .json("The password needs to be at least 5 characters long." );
     if (req.body.password !== req.body.passwordCheck)
       return res
         .status(400)
-        .json({ msg: "Enter the same password twice for verification." });
+        .json("Enter the same password twice for verification." );
 
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser)
       return res
         .status(400)
-        .json({ msg: "An account with this email already exists." });
+        .json("An account with this email already exists." );
 
     if (!req.body.displayName) req.body.displayName = req.body.email;
     //encrypt password
@@ -31,11 +32,10 @@ router.post("/register", async (req, res) => {
      req.body.password = passwordHash
     try {
       const createdUser = await User.create(req.body);
-      console.log(createdUser, ' created user');
-
-    res.send();
+ 
+    res.send(createdUser);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json(err);
   }
 });
 
@@ -48,16 +48,15 @@ router.post("/login", async (req, res) => {
 
     const foundUser = await User.findOne({ email: req.body.email });
     if (!foundUser)
-      return res
-        .status(400)
-        .json({ msg: "No account with this email has been registered." });
-
+      return res.status(400).json({ msg: "No account with this email has been registered." });
+        
     const isMatch = await bcrypt.compare(req.body.password, foundUser.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
+    if (!isMatch) return res.status(400).json({ msg:"Invalid credentials."  });
 
     const payload = {
       id: foundUser._id,
-      user: foundUser.email
+      user: foundUser.email,
+      isAdmin: foundUser.isAdmin
     };
 
     jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '1h'}, (err, token) => {
@@ -72,13 +71,8 @@ router.post("/login", async (req, res) => {
 
 router.get('/logout', (req, res) => {
 
-  req.session.destroy((err) => {
-    if(err){
-      res.send(err);
-    } else {
-      res.send('logged out');// back to the homepage change later
-    }
-  })
+ // destory token then send back to homepage
+ 
 
 })
 
@@ -87,16 +81,9 @@ router.delete("/delete", async (req, res) => {
     const deletedUser = await User.findByIdAndDelete(req.user);
     res.json(deletedUser);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json( err );
   }
 });
 
-router.get("/", async (req, res) => {
-  const user = await User.findById(req.user);
-  res.json({
-    displayName: user.displayName,
-    id: user._id,
-  });
-});
 
 module.exports = router;

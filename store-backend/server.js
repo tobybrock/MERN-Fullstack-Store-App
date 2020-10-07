@@ -19,12 +19,14 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
-const userRouter  = require('./routes/userRouter');
-const itemRouter  = require('./routes/itemRouter');
+const userRouter  = require('./src/routes/userRouter');
+const productRouter  = require('./src/routes/productRouter');
+const orderRouter  = require('./src/routes/orderRouter');
 
 app.use('/user', userRouter);
-app.use('/item', itemRouter);
+app.use('/product', productRouter);
+app.use('/order', orderRouter);
 
-app.listen(process.env.PORT || 6000, () => {
-  console.log('listening on port 6000');
+app.listen(process.env.PORT || 3000, () => {
+  console.log('listening on port 3000');
 });

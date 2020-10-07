@@ -1,25 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState }  from 'react';
+import Nav from "./components/Nav";
+import Home from './components/Home';
+import { LoginPage } from './components/LoginPage';
+import Profile from './components/Profile';
+import Register from './components/Register';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
+import jwt from "jwt-decode";
+import moment from "moment";
+
 import './App.css';
 
+const isLoggedIn = () => {
+  const token = window.localStorage.getItem("token");
+
+  try {
+    const decoded = jwt(token);    
+    const expires = moment.unix(decoded.exp);
+    
+    //todo set timoute for expiry to auto logout
+    //bonus: auto refresh token if user is active and expiry approaches
+
+    //true if token exists & expiry < current time
+    return moment().isBefore(expires);
+  } catch {
+    return false;
+  }
+};
+
+
 function App() {
+  const [loggedIn, setLoggedIn] = useState(isLoggedIn);
   return (
+    <Router>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <Nav logout={setLoggedIn} loginStatus={loggedIn}/>
+
+      <Switch>
+          <Route path="/profile">{loggedIn && <Profile />}</Route>
+                    <Route path="/login">
+            <LoginPage setLoginStatus={setLoggedIn} />
+          </Route>
+          <Route path="/register"><Register /></Route>
+          <Route path="/"> <Home /></Route>
+        </Switch>
+        
     </div>
+    </Router>
   );
 }
 

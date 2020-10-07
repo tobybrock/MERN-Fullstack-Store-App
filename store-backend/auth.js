@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken';
+const jwt = require("jsonwebtoken");
 
-const isAuth = (req, res, next) => {
+exports.isAuth = (req, res, next) => {
   const token = req.get('token');
   if (!token)
   return res
@@ -18,12 +18,10 @@ const isAuth = (req, res, next) => {
   })
 }
 
-const isAdmin = (req, res, next) => {
-    console.log(req.user);
-    if (req.user && req.user.isAdmin) {
+exports.isAdmin = async (req, res, next)  => {
+    if (req.user.isAdmin === true) {
       return next();
-    }
-    return res.status(401).send('Admin token is not valid.');
+    } 
+    return res.status(401).send("Admin Token verification failed");
   };
-
-  export { isAuth, isAdmin };
+  

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Order = require("../models/orderModel");
-import { isAuth, isAdmin } from "../../auth";
+const { isAuth, isAdmin } = require('../../auth');
 
 router.get("/", isAuth, async (req, res) => {
   try {

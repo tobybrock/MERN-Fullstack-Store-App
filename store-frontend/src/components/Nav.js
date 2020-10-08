@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles, AppBar, Toolbar, Button, IconButton} from '@material-ui/core/'
+import { makeStyles, AppBar, Toolbar, Button, IconButton, Typography} from '@material-ui/core/'
 import MenuIcon from '@material-ui/icons/Menu';
-
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -12,10 +12,17 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     spacing: 0,
   },
-  menuButton: {
+  menuIcons: {
     marginRight: theme.spacing(2),
   },
-   
+  menuButton: {
+    "&:hover": {
+     borderBottom: "2px solid white",
+     borderBottomWidth: 'thick',
+     borderBottomRightRadius: '0px',
+     borderBottomLeftRadius: '0px',
+  }
+},
 }));
 
 export default function Nav(props) {
@@ -32,21 +39,27 @@ export default function Nav(props) {
     <div className={classes.root}>
       <AppBar  elevation={0} position="static" style={{backgroundColor: '#173f35'}}>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} style={{backgroundColor: '#173f35'}} aria-label="menu">
+          <IconButton edge="start" className={classes.menuIcons} style={{backgroundColor: '#173f35', color: 'white'}} aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Button style={{backgroundColor: '#173f35'}} component={Link} to={'/'}>Home</Button>
+          <Button className={classes.menuButton} style={{backgroundColor: '#173f35', color: 'white'}} component={Link} to={'/'}>Home</Button>
           {
             logged 
             ? (
-              <Button style={{backgroundColor: '#173f35'}} onClick={handleLogout}>Logout</Button>
+              <>
+              <Button className={classes.menuButton} style={{backgroundColor: '#173f35', color: 'white'}} onClick={handleLogout} component={Link} to={'/'}>Logout</Button>
+              <Button className={classes.menuButton} style={{backgroundColor: '#173f35', color: 'white'}} component={Link} to={'/product'}>Create Product</Button>
+              </>
             )
             : (
-              <Button style={{backgroundColor: '#173f35'}} component={Link} to={'/login'}>Login</Button>
+              <Button className={classes.menuButton} style={{backgroundColor: '#173f35', color: 'white'}} component={Link} to={'/login'}>Login</Button>
             )
           }
-          <Button style={{backgroundColor: '#173f35'}} component={Link} to={'/profile'}>Profile</Button>
-          
+           <Typography type="title" color="inherit" style={{ flex: 1 }}>
+           </Typography>
+          <IconButton edge="end" className={classes.menuIcons} style={{backgroundColor: '#173f35', color: 'white'}} aria-label="menu">
+            <ShoppingCartIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
     </div>

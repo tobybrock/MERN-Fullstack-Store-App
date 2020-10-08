@@ -66,7 +66,7 @@ export function LoginPage(props) {
               <FormControl>
               <FormGroup>
                 <TextField
-                  id="outlined-basic"
+                  className="outlined-basic"
                   label="email"
                   name="email"
                   onChange={(e) => setEmail(e.currentTarget.value)}
@@ -74,7 +74,7 @@ export function LoginPage(props) {
                 />
                 <br />
                 <TextField
-                  id="outlined-basic"
+                  className="outlined-basic"
                   label="password"
                   type="password"
                   name="password"

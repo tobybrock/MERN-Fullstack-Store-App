@@ -2,7 +2,7 @@ import React, { useState }  from 'react';
 import Nav from "./components/Nav";
 import Home from './components/Home';
 import { LoginPage } from './components/LoginPage';
-import Profile from './components/Profile';
+import Product from './components/Product';
 import Register from './components/Register';
 import {
   BrowserRouter as Router,
@@ -41,8 +41,9 @@ function App() {
       <Nav logout={setLoggedIn} loginStatus={loggedIn}/>
 
       <Switch>
-          <Route path="/profile">{loggedIn && <Profile />}</Route>
-                    <Route path="/login">
+          <Route path="/product">{loggedIn && <Product />}
+          </Route>
+          <Route path="/login">
             <LoginPage setLoginStatus={setLoggedIn} />
           </Route>
           <Route path="/register"><Register /></Route>

@@ -37,6 +37,7 @@ function Home() {
       console.log(product.image);
       return (
         <Grid xs={3} item key={product._id}>
+        
           <Card className={classes.root}>
             <CardHeader
               style={{
@@ -76,7 +77,7 @@ function Home() {
     <React.Fragment>
       <Banner />
       <h1>Home</h1>
-      <Grid container justify="center" spacing={2}>
+      <Grid container justify="flex-start" spacing={10} margin= {10}>
         {mapProducts()}
       </Grid>
     </React.Fragment>

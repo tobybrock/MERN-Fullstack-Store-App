@@ -55,3 +55,19 @@
 
     return await result.json();
 }
+
+export async function postProduct(data) {
+    const result = await fetch(`http://localhost:3000/product/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    console.log('result', result);
+
+    if(result.status > 299) {
+        return Promise.reject('Unable to create product');
+    }
+    return result.json();
+}

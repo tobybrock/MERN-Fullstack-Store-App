@@ -19,11 +19,19 @@
       method: "POST",
       body: JSON.stringify(userDetails),
       headers: headerOptions,
+    })
+    .then((response) => {
+      console.log(response.headers.get('token'));
+      console.log(response.headers.get('Date'));
+
+      console.log(response.status);
+      console.log(response.statusText);
+      console.log(response.type);
+      console.log(response.url);
+    
     });
-    if(result.status > 299) {
-        return Promise.reject('Unable to login');
-    }
-    return result.headers.get("token");
+    
+    
   }
 
   export async function register(data) {
@@ -34,7 +42,7 @@
         },
         body: JSON.stringify(data)
     });
-    console.log('result', result);
+    console.log('result', result.json());
 
     if(result.status > 299) {
         return Promise.reject('Unable to create user');
@@ -58,11 +66,11 @@
 
 export async function postProduct(data) {
     const result = await fetch(`http://localhost:3000/product/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
     });
     console.log('result', result);
 
@@ -71,3 +79,5 @@ export async function postProduct(data) {
     }
     return result.json();
 }
+
+// order api calls

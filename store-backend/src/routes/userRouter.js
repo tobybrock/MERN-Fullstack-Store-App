@@ -61,7 +61,7 @@ router.post("/login", async (req, res) => {
 
     jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '1h'}, (err, token) => {
     res.set('token', token);
-    res.send();
+    res.send(foundUser);
     })
 
   } catch (err) {
@@ -69,12 +69,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get('/logout', (req, res) => {
-
- // destory token then send back to homepage
- 
-
-})
 
 router.delete("/delete", async (req, res) => {
   try {

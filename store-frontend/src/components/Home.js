@@ -7,13 +7,17 @@ import {
   CardContent,
   CardMedia,
   Typography,
+  IconButton
 } from "@material-ui/core";
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import Ratings from "react-ratings-declarative";
 import Banner from "./Banner";
 import { getProducts } from "../api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    
     boxShadow: "none",
     "&:hover": {
       boxShadow: "2px 2px 5px black",
@@ -32,13 +36,38 @@ function Home() {
     });
   }, []);
 
+  const addCart = (data) => {
+    const payload = {
+      product: data._id,
+      name: data.name,
+      image: data.image,
+      price: data.price,
+      countInStock: data.countInStock,
+      qty: 1
+    }
+    console.log(payload);
+    const currentCart = JSON.parse(window.localStorage.getItem('cart'));
+    if(currentCart !== null){
+      currentCart.push(payload);
+      console.log(currentCart);
+      window.localStorage.setItem('cart', JSON.stringify(currentCart));
+    } else {
+      let cartArray = [];
+      cartArray.push(payload);
+      console.log(cartArray);
+      window.localStorage.setItem('cart', JSON.stringify(cartArray));
+    }
+  }
+
   const mapProducts = () => {
     return products.map((product) => {
-      console.log(product.image);
       return (
         <Grid xs={3} item key={product._id}>
         
           <Card className={classes.root}>
+          <IconButton onClick={e => addCart(product)} style={{backgroundColor: 'white', color: 'black', alignItems: "right", justifyContent: "right"}} >
+          <AddShoppingCartIcon />
+          </IconButton>
             <CardHeader
               style={{
                 alignItems: "center",
@@ -75,9 +104,9 @@ function Home() {
   };
   return (
     <React.Fragment>
-      <Banner />
+      
       <h1>Home</h1>
-      <Grid container justify="flex-start" spacing={10} margin= {10}>
+      <Grid container justify="flex-start" spacing={10} >
         {mapProducts()}
       </Grid>
     </React.Fragment>

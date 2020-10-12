@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles, AppBar, Toolbar, Button, IconButton, Typography} from '@material-ui/core/'
+import clsx from 'clsx';
+import { makeStyles, AppBar, Toolbar, Button, IconButton, Typography, Drawer, Divider} from '@material-ui/core/'
 import MenuIcon from '@material-ui/icons/Menu';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
+
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
   },
   menuIcons: {
     marginRight: theme.spacing(2),
+    backgroundColor: '#173f35', 
+    color: 'white'
   },
   menuButton: {
     "&:hover": {
@@ -23,14 +28,26 @@ const useStyles = makeStyles((theme) => ({
      borderBottomLeftRadius: '0px',
   }
 },
+drawer: {
+  [theme.breakpoints.up('sm')]: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+},
 }));
 
 export default function Nav(props) {
+
   const classes = useStyles();
+
   let logged = props.loginStatus;
-  console.log("log", logged);
-  
-   const handleLogout = () => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => {
+    setOpen(true)
+  };
+
+     const handleLogout = () => {
      window.localStorage.removeItem("token");
     props.logout(false);
    };
@@ -39,7 +56,7 @@ export default function Nav(props) {
     <div className={classes.root}>
       <AppBar  elevation={0} position="static" style={{backgroundColor: '#173f35'}}>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuIcons} style={{backgroundColor: '#173f35', color: 'white'}} aria-label="menu">
+          <IconButton edge="start" className={classes.menuIcons} onClick={handleDrawerToggle} aria-label="menu">
             <MenuIcon />
           </IconButton>
           <Button className={classes.menuButton} style={{backgroundColor: '#173f35', color: 'white'}} component={Link} to={'/'}>Home</Button>
@@ -57,11 +74,14 @@ export default function Nav(props) {
           }
            <Typography type="title" color="inherit" style={{ flex: 1 }}>
            </Typography>
-          <IconButton edge="end" className={classes.menuIcons} style={{backgroundColor: '#173f35', color: 'white'}} aria-label="menu">
+          <IconButton edge="end" className={classes.menuIcons} component={Link} to={'/cart'} aria-label="menu">
             <ShoppingCartIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
+      
+      <Drawer
+        />
     </div>
   );
 }

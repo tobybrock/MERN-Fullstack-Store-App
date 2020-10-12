@@ -1,34 +1,23 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Stepper, Step, StepLabel, Button, Typography, TextField, Grid, FormGroup, FormControl,} from '@material-ui/core';
+import { useHistory, useLocation } from "react-router-dom";
+import { Typography, TextField, Grid, Card, Button , CardContent, Box} from '@material-ui/core';
 import { postProduct } from '../api';
 
 const useStyles = makeStyles((theme) => ({
     root: {
       width: '100%',
     },
-    button: {
-      marginRight: theme.spacing(1),
-    },
-    instructions: {
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
-    },
-    step: {
-            color: "#173f35"
+    card: {
+      background: "#d0d2ce",
     }
   }));
-  
-  function getSteps() {
-    return ['step1', 'Create an ad group', 'Create an ad'];
-  }
-
-   
-  export default function HorizontalLinearStepper() {
+     
+  export default function Product() {
     const classes = useStyles();
-    const steps = getSteps();
-    const [activeStep, setActiveStep] = React.useState(0);
-
+    let history = useHistory();
+    let location = useLocation();
+    let { from } = location.state || { from: { pathname: "/" } };
     const [name, setName] = useState("");
     const [image, setImage] = useState("");
     const [brand, setBrand] = useState("");
@@ -38,10 +27,30 @@ const useStyles = makeStyles((theme) => ({
     const [description, setDescription] = useState("");
     const [rating, setRating] = useState("");
 
-    function getStepContent(step) {
-        switch (step) {
-          case 0:
-            return <>
+    const onSubmit = (e) => {
+      e.preventDefault();
+      postProduct({
+        name: name,
+        image: image,
+        brand: brand,
+        price: price,
+        category: category,
+        countInStock: countInStock,
+        description: description,
+        rating: rating,
+      })
+      .then(() => {
+        history.push(from);
+        console.log("product created");
+      })
+      .catch((e) => {
+      console.log(e)
+      });
+      }
+    
+
+    return (
+      
             <Grid
               container
               direction="row"
@@ -49,9 +58,17 @@ const useStyles = makeStyles((theme) => ({
               alignItems="center"
               justify="center"
             >
-                 <Grid item xs={8}>
-                 <FormControl>
-                 <FormGroup>
+              
+              <Box>
+                <br />
+                 <Card className={classes.card}>
+                   <Typography variant="h2">
+                  Add a Product to Store
+                    </Typography>
+                   <hr />
+                   <CardContent>
+                     
+                     <Box display="flex" justifyContent="space-between" m={1} p={1} >
                  <TextField
                     className="outlined-basic"
                     label="name"
@@ -59,15 +76,6 @@ const useStyles = makeStyles((theme) => ({
                     onChange={(e) => setName(e.currentTarget.value)}
                     variant="outlined"
                   />
-                  <br />
-                  <TextField
-                    className="outlined-basic"
-                    label="image"
-                    name="image"
-                    onChange={(e) => setImage(e.currentTarget.value)}
-                    variant="outlined"
-                  />
-                  <br />
                   <TextField
                     className="outlined-basic"
                     label="brand"
@@ -75,32 +83,10 @@ const useStyles = makeStyles((theme) => ({
                     onChange={(e) => setBrand(e.currentTarget.value)}
                     variant="outlined"
                   />
+                  </Box>
                   <br />
-                    </FormGroup>
-                </FormControl> 
-                 </Grid>
-                </Grid>
-                </>
-          case 1:
-            return <>
-            <Grid
-              container
-              direction="row"
-              spacing={3}
-              alignItems="center"
-              justify="center"
-            >
-                 <Grid item xs={8}>
-                 <FormControl>
-                 <FormGroup>
-                 <TextField
-                    className="outlined-basic"
-                    label="price"
-                    name="price"
-                    onChange={(e) => setPrice(e.currentTarget.value)}
-                    variant="outlined"
-                  />
-                  <br />
+
+                  <Box display="flex" justifyContent="space-between" m={1} p={1} >
                   <TextField
                     className="outlined-basic"
                     label="category"
@@ -108,7 +94,6 @@ const useStyles = makeStyles((theme) => ({
                     onChange={(e) => setCategory(e.currentTarget.value)}
                     variant="outlined"
                   />
-                  <br />
                   <TextField
                     className="outlined-basic"
                     label="countInStock"
@@ -116,7 +101,17 @@ const useStyles = makeStyles((theme) => ({
                     onChange={(e) => setCountInStock(e.currentTarget.value)}
                     variant="outlined"
                   />
+                  </Box>
                   <br />
+
+                  <Box display="flex" justifyContent="space-between" m={1} p={1} >
+                  <TextField
+                    className="outlined-basic"
+                    label="price"
+                    name="price"
+                    onChange={(e) => setPrice(e.currentTarget.value)}
+                    variant="outlined"
+                  />
                   <TextField
                     className="outlined-basic"
                     label="rating"
@@ -124,98 +119,43 @@ const useStyles = makeStyles((theme) => ({
                     onChange={(e) => setRating(e.currentTarget.value)}
                     variant="outlined"
                   />
+                  </Box>
                   <br />
-                    </FormGroup>
-                </FormControl> 
-                 </Grid>
-                </Grid>
-                </>
-          case 2:
-            return  <>
-            <Grid
-            container
-            direction="row"
-            spacing={3}
-            alignItems="center"
-            justify="center"
-          >
-               <Grid item xs={8}>
-               <FormControl>
-               <FormGroup>
+                  <Typography variant="h6">
+                  Add an Image Url
+                  </Typography>
+                  <TextField
+                  className="outlined-basic"
+                  label="imageUrl"
+                  name="image"
+                  onChange={(e) => setImage(e.currentTarget.value)}
+                  variant="outlined"
+                  style={{margin: 20}}
+                />            
+                <br />
+
                <TextField
                   className="outlined-basic"
                   label="description"
+                  multiline
+                  rows={6}
                   name="description"
                   onChange={(e) => setDescription(e.currentTarget.value)}
                   variant="outlined"
+                  style={{margin: 20}}
                 />
-                </FormGroup>
-                </FormControl>
+                <br />
+                <Button  style={{
+                  backgroundColor: "#173f35",
+                  color: "white",
+                  margin: 20,
+                }} onClick={onSubmit}>
+                  Create Product!
+                  </Button>
+                </CardContent>
+                </Card>
+                </Box>
                 </Grid>
-                </Grid>
-                </>
 
-          default:
-            return 'Unknown step';
-        }
-      }
-      
-    const handleNext = () => {
-         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-  
-    const handleBack = () => {
-      setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-      
-    return (
-      <div className={classes.root}>
-        <Stepper activeStep={activeStep}>
-          {steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
-            return (
-              <Step key={label} {...stepProps}>
-                <StepLabel StepIconProps={{
-                    classes: { 
-                    root: classes.step,
-                    completed: classes.completed,
-                    active: classes.active,
-                    disabled: classes.disabled
+                ) 
                 }
-                  }}
-                  {...labelProps}>{label}</StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
-        <div>
-          {activeStep === steps.length ? (
-            <div>
-              <Typography component={'span'} className={classes.instructions}>
-                All steps completed - you&apos;re finished
-              </Typography>
-            </div>
-          ) : (
-            <div>
-              <Typography component={'span'} className={classes.instructions}>{getStepContent(activeStep)}</Typography>
-              <div>
-                <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-                  Back
-                </Button>
-                  
-                <Button
-                  variant="contained"
-                  style={{backgroundColor: '#173f35', color: 'white'}}
-                  onClick={handleNext}
-                  className={classes.button}
-                >
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }

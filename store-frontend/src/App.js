@@ -4,6 +4,8 @@ import Home from './components/Home';
 import { LoginPage } from './components/LoginPage';
 import Product from './components/Product';
 import Register from './components/Register';
+import Cart from './components/Cart';
+import Banner from './components/Banner';
 import {
   BrowserRouter as Router,
   Switch,
@@ -39,10 +41,11 @@ function App() {
     <div className="App">
 
       <Nav logout={setLoggedIn} loginStatus={loggedIn}/>
-
+      <Banner />
       <Switch>
           <Route path="/product">{loggedIn && <Product />}
           </Route>
+          <Route path="/cart"> <Cart /></Route>
           <Route path="/login">
             <LoginPage setLoginStatus={setLoggedIn} />
           </Route>

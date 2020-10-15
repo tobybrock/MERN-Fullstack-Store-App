@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     margin: 0,
     spacing: 0,
+    height: 85,
   },
   menuIcons: {
     marginRight: theme.spacing(2),
@@ -80,8 +81,7 @@ export default function Nav(props) {
         </Toolbar>
       </AppBar>
       
-      <Drawer
-        />
+      
     </div>
   );
 }

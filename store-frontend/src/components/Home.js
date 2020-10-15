@@ -12,16 +12,18 @@ import {
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import Ratings from "react-ratings-declarative";
-import Banner from "./Banner";
 import { getProducts } from "../api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    
     boxShadow: "none",
     "&:hover": {
       boxShadow: "2px 2px 5px black",
     },
+  },
+  gridLayout: {
+    padding: 20,
+    backgroundColor: '#ececea',
   },
 }));
 
@@ -62,7 +64,7 @@ function Home() {
   const mapProducts = () => {
     return products.map((product) => {
       return (
-        <Grid xs={3} item key={product._id}>
+        <Grid xs={3} item key={product._id} >
         
           <Card className={classes.root}>
           <IconButton onClick={e => addCart(product)} style={{backgroundColor: 'white', color: 'black', alignItems: "right", justifyContent: "right"}} >
@@ -105,8 +107,10 @@ function Home() {
   return (
     <React.Fragment>
       
-      <h1>Home</h1>
-      <Grid container justify="flex-start" spacing={10} >
+      <Typography variant="h2" >
+               <u>Hot Sellers</u>
+              </Typography>
+      <Grid container justify="flex-start" spacing={10} className={classes.gridLayout}>
         {mapProducts()}
       </Grid>
     </React.Fragment>

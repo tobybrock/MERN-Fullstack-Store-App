@@ -1,9 +1,9 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import {
   makeStyles,
   Card,
   Grid,
-  CardHeader,
   CardContent,
   CardMedia,
   Typography,
@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   cardItems: {
     width: "100%",
   },
+  gridLayout: {
+    paddingBottom: 20
+  }
 }));
 
 
@@ -82,7 +85,7 @@ let [cartArray, setCartArray] = useState(JSON.parse(window.localStorage.getItem(
         item 
         key={cartItem.product}>
 
-          <Grid container direction="column">
+          <Grid container direction="column" className={classes.gridLayout}>
           <Card className={classes.cardItems}>
             <Grid container justify="flex-end">
           <Button style={{backgroundColor: 'crimson', color: 'white', }} onClick={e => removeCart(cartItem)}>X</Button>
@@ -118,17 +121,14 @@ let [cartArray, setCartArray] = useState(JSON.parse(window.localStorage.getItem(
   };
 
   const isEmpty = () => {
-    if(cartArray !== null || cartArray.length === 0){
-      return cartArrayMap()
-    }
-    return <Typography variant="h3">
-    Shopping Cart Empty
-  </Typography>
-  }
-
-  return (
-    <>
-    <Typography variant="h1" align="left">
+    if(cartArray === null){
+      return <Typography variant="h3">
+        Shopping Cart Empty
+      </Typography>
+    }else if(cartArray.length !== 0){
+      return (
+      <>
+      <Typography variant="h1" align="left">
       Your Shopping Cart
     </Typography>
       <Grid container justify="flex-end">
@@ -136,11 +136,20 @@ let [cartArray, setCartArray] = useState(JSON.parse(window.localStorage.getItem(
       <Typography variant="h3" align="left">
       Your Total: $ {total()}
     </Typography>
-    <Button style={{backgroundColor: '#173f35', color: 'white', display: "inline-block"}}>Pay Now</Button>
+    <br />
+    <Button style={{backgroundColor: '#173f35', color: 'white', display: "inline-block"}} component={Link}
+                to={"/shipping"}>Pay Now</Button>
       </Card>
       </Grid>
-      {isEmpty()} 
-    
+      {cartArrayMap()}
+      </>
+      )
+    }
+  }
+
+  return (
+    <>
+          {isEmpty()} 
     </>
   );
 }

@@ -6,6 +6,7 @@ import Product from './components/Product';
 import Register from './components/Register';
 import Cart from './components/Cart';
 import Banner from './components/Banner';
+import Shipping from './components/Shipping';
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,7 +14,7 @@ import {
 } from "react-router-dom";
 import jwt from "jwt-decode";
 import moment from "moment";
-
+import 'fontsource-roboto';
 import './App.css';
 
 const isLoggedIn = () => {
@@ -43,7 +44,9 @@ function App() {
       <Nav logout={setLoggedIn} loginStatus={loggedIn}/>
       <Banner />
       <Switch>
-          <Route path="/product">{loggedIn && <Product />}
+          <Route path="/product">{loggedIn ? <Product /> : <Home />}
+          </Route>
+          <Route path="/shipping">{loggedIn ? <Shipping /> : <Home />}
           </Route>
           <Route path="/cart"> <Cart /></Route>
           <Route path="/login">
